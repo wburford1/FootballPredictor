@@ -1,0 +1,1 @@
+Team, Wins, Losses, Strength of Schedule, YPG, YPG pass, YPG rush, YAPG, YAPG pass, YAPG rush, PPG, PAPG, 3rd Down Conversion Rate, Red Zone Conversion Rate (in decimal form), FG Percentage (in decimal form), Current win/loss streak, Home Wins, Home Losses, Away Wins, Away Losses, Penalty yards/game, DVOA (in decimal form)
