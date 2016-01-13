@@ -31,8 +31,8 @@ public class FootballPredictor{
 		constant = 1;
 
 		FootballPredictor machine = new FootballPredictor();
-		FootballPredictor.weights = machine.learn("matchups.txt");
-		System.out.println("Found new weights. Check weights.txt");
+		machine.learn("matchups.txt");
+		machine.seeTheFuture("games.txt");
 	}
 	public FootballPredictor(){
 
@@ -106,8 +106,7 @@ public class FootballPredictor{
 			writer.print(weight+", ");
 		}
 		writer.close();
-		//FootballPredictor.weights = weights;
-		return weights;
+		FootballPredictor.weights = weights;
 	}
 
 	public void seeTheFuture(String dataFileName){
@@ -132,7 +131,7 @@ public class FootballPredictor{
 			String awayName = game[0];
 			String homeName = game[1];
 			if (FootballPredictor.teamValues.containsKey(awayName)&&FootballPredictor.teamValues.containsKey(homeName)) {
-				int prediction = this.predictWinner(FootballPredictor.teamValues.get(awayName), FootballPredictor.teamValues.get(homeName));
+				double prediction = this.predictWinner(FootballPredictor.teamValues.get(awayName), FootballPredictor.teamValues.get(homeName));
 				if (prediction>0) {
 					writer.println(awayName + "will beat" + homeName);
 				}
@@ -243,6 +242,9 @@ public class FootballPredictor{
 		            String[] split = line.split(", ");
 		            stringArrList.add(split);
 		            line = br.readLine();
+		        }
+		        if (stringArrList.size()==0) {
+		        	return null;
 		        }
 		        String[][] output = new String[stringArrList.size()][stringArrList.get(0).length];
 		        for (int counter = 0; counter<stringArrList.size(); counter++) {
