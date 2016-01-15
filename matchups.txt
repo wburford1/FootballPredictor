@@ -1,0 +1,16 @@
+Pittsburgh Steelers, New England Patriots, 2
+Green Bay Packers, Chicago Bears, 1
+Kansas City Chiefs, Houston Texans, 1
+Cleveland Browns, New York Jets, 2
+Indianapolis Colts, Buffalo Bills, 2
+Miami Dolphins, Washington Redskins, 1
+Carolina Panthers, Jacksonville Jaguars, 1
+Seattle Seahawks, St. Louis Rams, 2
+New Orleans Saints, Arizona Cardinals, 2
+Detroit Lions, San Diego Chargers, 2
+Tennessee Titans, Tampa Bay Buccaneers, 1
+Cincinnati Bengals, Oakland Raiders, 1
+Baltimore Ravens, Denver Broncos, 2
+New York Giants, Dallas Cowboys, 2
+Philadelphia Eagles, Atlanta Falcons, 2
+Minnesota Vikings, San Francisco 49ers, 2

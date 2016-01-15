@@ -20,8 +20,9 @@ public class FootballPredictor{
 			FootballPredictor.weights = new double[numberOfValues*2];
 		}
 		else{
+			FootballPredictor.weights = new double[numberOfValues*2];
 			for (int counter=0;counter<tempList.size();counter++) {
-				weights[counter] = Integer.parseInt(tempList.get(counter));
+				weights[counter] = Double.parseDouble(tempList.get(counter));
 			}
 		}
 		System.out.println("weights = "+Arrays.toString(FootballPredictor.weights));
@@ -32,7 +33,7 @@ public class FootballPredictor{
 
 		FootballPredictor machine = new FootballPredictor();
 		machine.learn("matchups.txt");
-		machine.seeTheFuture("games.txt");
+		machine.seeTheFuture("futureGames.txt");
 	}
 	public FootballPredictor(){
 
@@ -43,10 +44,18 @@ public class FootballPredictor{
 		if (matchups==null) {
 			return;
 		}
+		System.out.println("teamValues keys = ");
+		Set<String> keySet = FootballPredictor.teamValues.keySet();
+		for (String key : keySet) {
+			System.out.print(key + ", ");
+		}
+		System.out.println();
 		//double[] weights = Arrays.copyOf(FootballPredictor.weights,FootballPredictor.weights.length);
 		double[] weights = new double[FootballPredictor.numberOfValues*2];
 		for (int counter = 0; counter<matchups.length; counter++) {
 			String[] matchup = matchups[counter];
+			int n = counter+1;
+			System.out.println("current matchup = "+Arrays.toString(matchup));
 			double sum = (double)(FootballPredictor.constant);
 
 			if (FootballPredictor.teamValues.containsKey(matchup[0])&&FootballPredictor.teamValues.containsKey(matchup[1])) {
@@ -65,30 +74,37 @@ public class FootballPredictor{
 				*sum is positive and team2 wins, wrong
 				*sum is negative and team2 wins, correct
 				*/
-				if ((sum>0&&matchup[2].equals(1))||(sum<0&&matchup[2].equals(2))) {
+				if ((sum>0&&matchup[2].equals("1"))||(sum<0&&matchup[2].equals("2"))) {
 					//correct
 				}
-				else if (sum<0&&matchup[2].equals(1)) {
+				else if (sum<0&&matchup[2].equals("1")) {
 					//wrong. should be positive
 					for (int x=0; x<FootballPredictor.numberOfValues; x++) {
-						weights[x] = weights[x]+(1/counter)*away[x];
-						weights[FootballPredictor.numberOfValues+x] = weights[FootballPredictor.numberOfValues+x]+(1/counter)*home[x];
+						weights[x] = weights[x]+(1/n)*away[x];
+						weights[FootballPredictor.numberOfValues+x] = weights[FootballPredictor.numberOfValues+x]+(1/n)*home[x];
 					}
 				}
-				else if (sum>0&&matchup[2].equals(2)) {
+				else if (sum>0&&matchup[2].equals("2")) {
 					//wrong. should be negative
 					for (int x=0; x<FootballPredictor.numberOfValues; x++) {
-						weights[x] = weights[x]-(1/counter)*away[x];
-						weights[FootballPredictor.numberOfValues+x] = weights[FootballPredictor.numberOfValues+x]-(1/counter)*home[x];
+						weights[x] = weights[x]-(1/n)*away[x];
+						weights[FootballPredictor.numberOfValues+x] = weights[FootballPredictor.numberOfValues+x]-(1/n)*home[x];
 					}
 				}
 				else {
 					System.out.println("Something went wrong\nMatchup = " + Arrays.toString(matchup)+"\nSum = "+sum);
 					System.out.println("\nhome = "+Arrays.toString(home)+"\naway = "+Arrays.toString(away)+"\nweights = "+Arrays.toString(weights));
+					System.out.println("matchup[2] = "+matchup[2]);
 				}
 			}
 			else {
 				System.out.println("Skipping matchup: " + Arrays.toString(matchup));
+				if (!FootballPredictor.teamValues.containsKey(matchup[0])) {
+					System.out.println("unrecognized team name: _"+ matchup[0]+"_");
+				}
+				else if (!FootballPredictor.teamValues.containsKey(matchup[1])) {
+					System.out.println("unrecognized team name: _"+ matchup[1]+"_");
+				}
 			}
 		}
 
@@ -133,10 +149,10 @@ public class FootballPredictor{
 			if (FootballPredictor.teamValues.containsKey(awayName)&&FootballPredictor.teamValues.containsKey(homeName)) {
 				double prediction = this.predictWinner(FootballPredictor.teamValues.get(awayName), FootballPredictor.teamValues.get(homeName));
 				if (prediction>0) {
-					writer.println(awayName + "will beat" + homeName);
+					writer.println(awayName + " will beat " + homeName);
 				}
 				else if (prediction<0) {
-					writer.println(homeName + "will beat" + awayName);
+					writer.println(homeName + " will beat " + awayName);
 				}
 				else {
 					//indeterminant
