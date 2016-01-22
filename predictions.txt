@@ -1,2 +1,11 @@
 Predictions: 
-New England Patriots will beat Pittsburgh Steelers
+New England Patriots will beat Kansas City Chiefs. Sum = -292379.6275765902
+Pittsburgh Steelers will beat Denver Broncos. Sum = 501826.70642161195
+Carolina Panthers will beat Seattle Seahawks. Sum = -55601.6922094797
+Arizona Cardinals will beat Green Bay Packers. Sum = -253017.30729308177
+Washington Redskins will beat Green Bay Packers. Sum = -238798.17133708193
+Seattle Seahawks will beat Minnesota Vikings. Sum = 108967.96135852023
+Pittsburgh Steelers will beat Cincinnati Bengals. Sum = 242073.47669681208
+Kansas City Chiefs will beat Houston Texans. Sum = 19467.662415409613
+New England Patriots will beat Denver Broncos. Sum = 348195.42248444323
+Arizona Cardinals will beat Carolina Panthers. Sum = 216630.81835996415

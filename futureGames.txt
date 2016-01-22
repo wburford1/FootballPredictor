@@ -1,1 +1,10 @@
-Pittsburgh Steelers, New England Patriots
+Kansas City Chiefs, New England Patriots
+Pittsburgh Steelers, Denver Broncos
+Seattle Seahawks, Carolina Panthers
+Green Bay Packers, Arizona Cardinals
+Green Bay Packers, Washington Redskins
+Seattle Seahawks, Minnesota Vikings
+Pittsburgh Steelers, Cincinnati Bengals
+Kansas City Chiefs, Houston Texans
+New England Patriots, Denver Broncos
+Arizona Cardinals, Carolina Panthers

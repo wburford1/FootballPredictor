@@ -1,0 +1,42 @@
+Wins: 89.72748959977027
+Losses: 61.48787627146917
+Strength of Schedule: -11.522040790898629
+YPG: 2860.774999929789
+YPG pass: 1704.193094629026
+YPG rush: 1155.3727982539704
+YAPG: 3010.4768152241622
+YAPG pass: 1899.8578097703842
+YAPG rush: 1110.7087180602794
+PPG: 203.3513869278361
+PAPG: 200.38286169299528
+3rd Down Conversion Rate: 3.385978238623144
+Red Zone Conversion Rate (in decimal form): 5.36555883049627
+FG Percentage (in decimal form): 7.9824429655716145
+Current win/loss streak: 19.132115520581262
+Home Wins: 38.54981418100377
+Home Losses: 37.408278971320826
+Away Wins: 48.532100210454075
+Away Losses: 17.325602192929985
+Penalty yards/game: 993.6400146618365
+DVOA (in decimal form): 1.4397470974702185
+Wins: -96.0
+Losses: -32.0
+Strength of Schedule: 3.1999999999999997
+YPG: -2995.2000000000003
+YPG pass: -2293.6
+YPG rush: -702.3999999999999
+YAPG: -2715.2000000000003
+YAPG pass: -1925.6000000000001
+YAPG rush: -790.3999999999999
+PPG: -232.79999999999998
+PAPG: -157.6
+3rd Down Conversion Rate: -3.2719999999999994
+Red Zone Conversion Rate (in decimal form): -5.248
+FG Percentage (in decimal form): -7.335999999999999
+Current win/loss streak: 16.0
+Home Wins: -56.0
+Home Losses: -8.0
+Away Wins: -40.0
+Away Losses: -24.0
+Penalty yards/game: -430.40000000000003
+DVOA (in decimal form): -1.808

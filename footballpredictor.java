@@ -10,12 +10,17 @@ public class FootballPredictor{
 	private static int constant;
 
 	public static void main(String[]args){
+		/*
+		*type = 0 for testing data against itself
+		*type = 1 to predict future using all data
+		*/
+		int type = 0;
 		//set meanings
 		Object[] temp = FootballPredictor.readFileToArrayList("weightMeanings.txt").toArray();
 		meanings = Arrays.copyOf(temp,temp.length,String[].class);
 		numberOfValues = meanings.length-1;//first is the name, which is key in map
 		//set weights
-		ArrayList<String> tempList = FootballPredictor.readFileToArrayList("weights.txt");
+		ArrayList<String> tempList = new ArrayList<String>(); //= FootballPredictor.readFileToArrayList("weights.txt");
 		if (tempList==null||tempList.size()!=numberOfValues*2) {
 			FootballPredictor.weights = new double[numberOfValues*2];
 		}
@@ -30,20 +35,43 @@ public class FootballPredictor{
 		teamValues = FootballPredictor.readFileToDoubleArrMap("teamData.txt");
 		//System.out.println(FootballPredictor.doubleArrMapToString(teamValues));
 		constant = 1;
+		if (type == 1) {
+			FootballPredictor machine = new FootballPredictor();
+			String[][] matchups = FootballPredictor.readFileto2DStringArray("matchups.txt");
+			if (matchups==null) {
+				System.out.println("matchups == null");
+				return;
+			}
+			machine.learn(matchups);
 
-		FootballPredictor machine = new FootballPredictor();
-		machine.learn("matchups.txt");
-		machine.seeTheFuture("futureGames.txt");
+			String[][] games = FootballPredictor.readFileto2DStringArray("futureGames.txt");
+			if (games==null) {
+				System.out.println("games == null");
+				return;
+			}
+			machine.seeTheFuture(games);
+		}
+		else if(type == 0) {
+			FootballPredictor machine = new FootballPredictor();
+			String[][] matchups = FootballPredictor.readFileto2DStringArray("matchups.txt");
+			ArrayList<String []> sneakySnake = new ArrayList<String []>();
+			for (String[] bam: matchups) {
+				sneakySnake.add(bam);
+			}
+			Collections.shuffle(sneakySnake);
+			matchups = sneakySnake.toArray(matchups);
+			System.out.println("matchups[0] = "+Arrays.toString(matchups[0]));
+		}
+		else{
+			System.out.println("type not set. exiting");
+			return;
+		}
 	}
 	public FootballPredictor(){
 
 	}
 
-	public void learn(String dataFileName){
-		String[][] matchups = FootballPredictor.readFileto2DStringArray(dataFileName);
-		if (matchups==null) {
-			return;
-		}
+	public void learn(String[][] matchups){
 		System.out.println("teamValues keys = ");
 		Set<String> keySet = FootballPredictor.teamValues.keySet();
 		for (String key : keySet) {
@@ -52,15 +80,19 @@ public class FootballPredictor{
 		System.out.println();
 		//double[] weights = Arrays.copyOf(FootballPredictor.weights,FootballPredictor.weights.length);
 		double[] weights = new double[FootballPredictor.numberOfValues*2];
-		for (int counter = 0; counter<matchups.length; counter++) {
-			String[] matchup = matchups[counter];
-			int n = counter+1;
+		int numberGames = 0;
+		for (int counter = 0; counter<matchups.length*8; counter++) {
+			numberGames++;
+			int place = counter%matchups.length;
+			String[] matchup = matchups[place];
+			int n = place+1;
 			System.out.println("current matchup = "+Arrays.toString(matchup));
 			double sum = (double)(FootballPredictor.constant);
 
 			if (FootballPredictor.teamValues.containsKey(matchup[0])&&FootballPredictor.teamValues.containsKey(matchup[1])) {
 				double[] away = Arrays.copyOf(FootballPredictor.teamValues.get(matchup[0]),FootballPredictor.numberOfValues);
 				double[] home = Arrays.copyOf(FootballPredictor.teamValues.get(matchup[1]),FootballPredictor.numberOfValues);
+				//System.out.println("away = "+Arrays.toString(away));
 				double[] weightedAway = new double[FootballPredictor.numberOfValues];
 				double[] weightedHome = new double[FootballPredictor.numberOfValues];
 				for (int x = 0; x<FootballPredictor.numberOfValues; x++) {
@@ -79,17 +111,25 @@ public class FootballPredictor{
 				}
 				else if (sum<0&&matchup[2].equals("1")) {
 					//wrong. should be positive
+					//System.out.println("should be first team.");
+					//System.out.println("old weights = "+Arrays.toString(weights));
 					for (int x=0; x<FootballPredictor.numberOfValues; x++) {
-						weights[x] = weights[x]+(1/n)*away[x];
+						//System.out.println("weights[x] before = "+weights[x]);
+						weights[x] = weights[x]+(1.0/n)*away[x];
 						weights[FootballPredictor.numberOfValues+x] = weights[FootballPredictor.numberOfValues+x]+(1/n)*home[x];
+						//System.out.println("weights[x] after = "+weights[x]);
 					}
+					//System.out.println("new weights = "+Arrays.toString(weights));
 				}
 				else if (sum>0&&matchup[2].equals("2")) {
 					//wrong. should be negative
+					//System.out.println("should be second team.");
+					//System.out.println("old weights = "+Arrays.toString(weights));
 					for (int x=0; x<FootballPredictor.numberOfValues; x++) {
 						weights[x] = weights[x]-(1/n)*away[x];
 						weights[FootballPredictor.numberOfValues+x] = weights[FootballPredictor.numberOfValues+x]-(1/n)*home[x];
 					}
+					//System.out.println("new weights = "+Arrays.toString(weights));
 				}
 				else {
 					System.out.println("Something went wrong\nMatchup = " + Arrays.toString(matchup)+"\nSum = "+sum);
@@ -109,8 +149,10 @@ public class FootballPredictor{
 		}
 
 		PrintWriter writer;
+		PrintWriter writer2;
 		try{
 			writer = new PrintWriter("weights.txt","UTF-8");
+			writer2 = new PrintWriter("namedWeights.txt","UTF-8");
 		}catch(FileNotFoundException e){
 			System.out.println("Error: "+e);
 			return;
@@ -121,15 +163,19 @@ public class FootballPredictor{
 		for (double weight : weights) {
 			writer.print(weight+", ");
 		}
+		for(int counter = 0; counter<FootballPredictor.numberOfValues; counter++){
+			writer2.println(FootballPredictor.meanings[counter+1]+": "+weights[counter]);
+		}
+		for (int counter = FootballPredictor.numberOfValues; counter<FootballPredictor.numberOfValues*2; counter++) {
+			writer2.println(FootballPredictor.meanings[counter-FootballPredictor.numberOfValues+1]+": "+weights[counter]);
+		}
 		writer.close();
+		writer2.close();
 		FootballPredictor.weights = weights;
+		System.out.println("numberGames = "+numberGames);
 	}
 
-	public void seeTheFuture(String dataFileName){
-		String[][] games = FootballPredictor.readFileto2DStringArray(dataFileName);
-		if (games==null) {
-			return;
-		}
+	public void seeTheFuture(String[][] games){
 
 		PrintWriter writer;
 		try{
@@ -149,14 +195,14 @@ public class FootballPredictor{
 			if (FootballPredictor.teamValues.containsKey(awayName)&&FootballPredictor.teamValues.containsKey(homeName)) {
 				double prediction = this.predictWinner(FootballPredictor.teamValues.get(awayName), FootballPredictor.teamValues.get(homeName));
 				if (prediction>0) {
-					writer.println(awayName + " will beat " + homeName);
+					writer.println(awayName + " will beat " + homeName+ ". Sum = "+prediction);
 				}
 				else if (prediction<0) {
-					writer.println(homeName + " will beat " + awayName);
+					writer.println(homeName + " will beat " + awayName + ". Sum = "+prediction);
 				}
 				else {
 					//indeterminant
-					writer.println("Could not determine winner of " + awayName + " vs. "+ homeName);
+					writer.println("Could not determine winner of " + awayName + " vs. "+ homeName+ ". Sum = "+prediction);
 				}
 			}
 		}
